@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      img{
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    {% if True %}
+    <img src="{{ url_for('static', filename=image_file) }}"/>
+    {% endif %}
+  </body>
+</html>

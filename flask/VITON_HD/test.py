@@ -6,14 +6,18 @@ from torch import nn
 from torch.nn import functional as F
 import torchgeometry as tgm
 
-from datasets import VITONDataset, VITONDataLoader
-from networks import SegGenerator, GMM, ALIASGenerator
-from utils import gen_noise, load_checkpoint, save_images
-
+from VITON_HD import datasets, networks, utils
+# from datasets import VITONDataset, VITONDataLoader
+# from networks import SegGenerator, GMM, ALIASGenerator
+# from utils import gen_noise, load_checkpoint, save_images
 
 def get_opt():
+    CHECKPOINT_DIR = 'D:/CP2/CP-VTON-HD_with_Recommendation_System/flask/VITON_HD/checkpoints'
+    DATASETS_DIR = 'D:/CP2/CP-VTON-HD_with_Recommendation_System/flask/VITON_HD/datasets'
+    RESULTS_DIR = 'D:/CP2/CP-VTON-HD_with_Recommendation_System/flask/static'
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name', type=str, required=True)
+    parser.add_argument('--name', type=str, default='convert') #required=True, default='wow')
 
     parser.add_argument('-b', '--batch_size', type=int, default=1)
     parser.add_argument('-j', '--workers', type=int, default=1)
@@ -21,11 +25,11 @@ def get_opt():
     parser.add_argument('--load_width', type=int, default=768)
     parser.add_argument('--shuffle', action='store_true')
 
-    parser.add_argument('--dataset_dir', type=str, default='./datasets/')
+    parser.add_argument('--dataset_dir', type=str, default=DATASETS_DIR)
     parser.add_argument('--dataset_mode', type=str, default='test')
     parser.add_argument('--dataset_list', type=str, default='test_pairs.txt')
-    parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints/')
-    parser.add_argument('--save_dir', type=str, default='./results/')
+    parser.add_argument('--checkpoint_dir', type=str, default=CHECKPOINT_DIR)
+    parser.add_argument('--save_dir', type=str, default=RESULTS_DIR)
 
     parser.add_argument('--display_freq', type=int, default=1)
 
@@ -56,8 +60,8 @@ def test(opt, seg, gmm, alias):
     up = nn.Upsample(size=(opt.load_height, opt.load_width), mode='bilinear')
     gauss = tgm.image.GaussianBlur((15, 15), (3, 3))
 
-    test_dataset = VITONDataset(opt)
-    test_loader = VITONDataLoader(opt, test_dataset)
+    test_dataset = datasets.VITONDataset(opt)
+    test_loader = datasets.VITONDataLoader(opt, test_dataset)
 
     with torch.no_grad():
         for i, inputs in enumerate(test_loader.data_loader):
@@ -76,7 +80,7 @@ def test(opt, seg, gmm, alias):
             pose_down = F.interpolate(pose, size=(256, 192), mode='bilinear')
             c_masked_down = F.interpolate(c * cm, size=(256, 192), mode='bilinear')
             cm_down = F.interpolate(cm, size=(256, 192), mode='bilinear')
-            seg_input = torch.cat((cm_down, c_masked_down, parse_agnostic_down, pose_down, gen_noise(cm_down.size())), dim=1)
+            seg_input = torch.cat((cm_down, c_masked_down, parse_agnostic_down, pose_down, utils.gen_noise(cm_down.size())), dim=1)
 
             parse_pred_down = seg(seg_input)
             parse_pred = gauss(up(parse_pred_down))
@@ -122,10 +126,10 @@ def test(opt, seg, gmm, alias):
             for img_name, c_name in zip(img_names, c_names):
                 unpaired_names.append('{}_{}'.format(img_name.split('_')[0], c_name))
 
-            save_images(output, unpaired_names, os.path.join(opt.save_dir, opt.name))
+            utils.save_images(output, c_names, os.path.join(opt.save_dir, opt.name))
 
-            if (i + 1) % opt.display_freq == 0:
-                print("step: {}".format(i + 1))
+            # if (i + 1) % opt.display_freq == 0:
+            #     print("step: {}".format(i + 1))
 
 
 def main():
@@ -135,15 +139,15 @@ def main():
     if not os.path.exists(os.path.join(opt.save_dir, opt.name)):
         os.makedirs(os.path.join(opt.save_dir, opt.name))
 
-    seg = SegGenerator(opt, input_nc=opt.semantic_nc + 8, output_nc=opt.semantic_nc)
-    gmm = GMM(opt, inputA_nc=7, inputB_nc=3)
+    seg = networks.SegGenerator(opt, input_nc=opt.semantic_nc + 8, output_nc=opt.semantic_nc)
+    gmm = networks.GMM(opt, inputA_nc=7, inputB_nc=3)
     opt.semantic_nc = 7
-    alias = ALIASGenerator(opt, input_nc=9)
+    alias = networks.ALIASGenerator(opt, input_nc=9)
     opt.semantic_nc = 13
 
-    load_checkpoint(seg, os.path.join(opt.checkpoint_dir, opt.seg_checkpoint))
-    load_checkpoint(gmm, os.path.join(opt.checkpoint_dir, opt.gmm_checkpoint))
-    load_checkpoint(alias, os.path.join(opt.checkpoint_dir, opt.alias_checkpoint))
+    utils.load_checkpoint(seg, os.path.join(opt.checkpoint_dir, opt.seg_checkpoint))
+    utils.load_checkpoint(gmm, os.path.join(opt.checkpoint_dir, opt.gmm_checkpoint))
+    utils.load_checkpoint(alias, os.path.join(opt.checkpoint_dir, opt.alias_checkpoint))
 
     seg.eval()
     gmm.eval()
