@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import os, shutil, random
 from VITON_HD import test
 from upload_cloth_segmention import seg
+from mysql import mysql
 
 UPLOAD_DIR = 'D:/CP2/CP-VTON-HD_with_Recommendation_System/flask/static/upload_image'
 
@@ -39,6 +40,13 @@ def cp_vton():
 
     test.main()  # CP-VTON-HD 실행 함수
     return render_template('view.html', image_file='convert/'+image_name)
+
+
+@app.route('/end', methods=['GET', 'POST'])
+def db():
+    rating = request.form['만족도']
+    mysql(rating)
+    return render_template('end.html')
 
 
 if __name__ == "__main__":

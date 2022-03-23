@@ -1,38 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-            <style>
-                .accordion {
-                background-color: #eee;
-                color: #444;
-                cursor: pointer;
-                padding: 18px;
-                width: 100%;
-                border: none;
-                text-align: left;
-                outline: none;
-                font-size: 15px;
-                transition: 0.4s;
-                }
-
-                .active, .accordion:hover {
-                background-color: #ccc; 
-                }
-
-                .panel {
-                padding: 0 18px;
-                display: none;
-                background-color: white;
-                overflow: hidden;
-                }
-
-                img{
-                    width: 200px;
-                }
-            </style>
+        <style>
+            img{
+                width: 200px;
+            }
+        </style>
     </head>
-        <title>hi</title>
+        <title>CP-VTON-HD</title>
         <body>
             <div class="item">
                 <img src="{{ url_for('static', filename='image/00891_00.jpg') }}"/>
@@ -41,7 +16,7 @@
                 <img src="{{ url_for('static', filename='image/07573_00.jpg') }}"/>
                 <img src="{{ url_for('static', filename='image/08909_00.jpg') }}"/>
                 <img src="{{ url_for('static', filename='image/10549_00.jpg') }}"/>
-                <form action = "http://localhost:5000/fileUpload" method="POST"
+                <form action = "{{url_for('cp_vton')}}" method="POST"
                 enctype="multipart/form-data">
                 <input type = "file" name = "file" />
                 <input type = "submit"/>

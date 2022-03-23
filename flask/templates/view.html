@@ -8,8 +8,15 @@
     </style>
   </head>
   <body>
-    {% if True %}
-    <img src="{{ url_for('static', filename=image_file) }}"/>
-    {% endif %}
+    <center>
+      <form method="POST", action="{{url_for('db')}}">
+        {% if True %}
+        <img src="{{ url_for('static', filename=image_file) }}"/>
+        {% endif %}
+        <br><br><br>
+        만족도: <input type="number", name="만족도", min="0", max="5"><br><br>
+        <input type="submit", value="만족도 등록하기">
+      </form>
+    </center>
   </body>
 </html>
