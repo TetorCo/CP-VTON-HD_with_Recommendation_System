@@ -4,7 +4,8 @@
 
 ## 프로젝트 설명
 내가 입어보고 싶은 옷을 집에서도 웹 사이트를 사용해서 간편하게 실제로 입었을 때 느낌을 알아보고 구매 여부를 결정하는 것을 도와주고 다른 옷을 추천해주는 프로젝트입니다.
-![cp](https://user-images.githubusercontent.com/76984534/160847977-d156796e-23f6-46c7-823b-0057d778318f.png)
+![cpvtonhomepage](https://user-images.githubusercontent.com/76984534/160874287-857edf6e-b7dd-4c3a-a929-f8d934546d99.png)
+
 
 ## 모델 선정 과정
 Virtual-On 모델 종류 중 하나인 Image-based Virtual-On 모델을 사용하기로 했고, 더 고화질의 이미지를 생성할 수 있는 CP-VTON-HD 모델을 선택하였습니다. 모델을 직접 구현하고 학습을 하는 것에 한계가 있었기 때문에 출처 링크에서 모델을 가져와서 유저가 업로드하는 사람 이미지와 옷 이미지를 적용시키는 것으로 결정했습니다.
@@ -53,6 +54,9 @@ requirements.txt	  # 필요한 라이브러리 모음
 upload_cloth_segmention.py  # 모델이 업로드한 이미지를 학습할 수 있게 segmention 해주는 파일
 ```
 
+## 프로젝트 결과
+![cp](https://user-images.githubusercontent.com/76984534/160847977-d156796e-23f6-46c7-823b-0057d778318f.png)
+
 ## 사용한 프로그램
 * HTML : 웹 페이지 제작
 * Python(Flak) : 서버 연결
@@ -62,3 +66,4 @@ upload_cloth_segmention.py  # 모델이 업로드한 이미지를 학습할 수 
 1. 추천 시스템 구현 (필수!)
 2. 사용자가 지정되 있는 피팅 모델이 아니라 본인의 모습으로 모델에 적용할 수 있도록 코드를 수정
 3. EC2나 Heroku에도 배포
+4. Docker Image로 만들어서 Docker Hub에 
