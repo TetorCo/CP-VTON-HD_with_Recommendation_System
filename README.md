@@ -1,5 +1,7 @@
 # CP-VTON-HD_with_Recommendation_System(추천시스템)
 
+* 제작 기간 : 2022-03-10 ~ 2022-03-24
+
 ## 출처 : https://github.com/shadow2496/VITON-HD (저작권에 관한 모든 법률은 원본을 따릅니다. / 문제가 있을시 Repo를 비공개 처리 하겠습니다.)
 
 ## 프로젝트 기획 배경 및 설명
