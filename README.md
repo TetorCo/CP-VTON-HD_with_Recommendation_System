@@ -71,4 +71,4 @@ upload_cloth_segmention.py  # 모델이 업로드한 이미지를 학습할 수 
 1. 추천 시스템 구현 (필수!)
 2. 사용자가 지정되 있는 피팅 모델이 아니라 본인의 모습으로 모델에 적용할 수 있도록 코드를 수정
 3. EC2나 Heroku에도 배포
-4. Docker Image로 만들어서 Docker Hub에 
+4. Docker Image로 만들어서 Docker Hub에 올리기
